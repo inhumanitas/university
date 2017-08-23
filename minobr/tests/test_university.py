@@ -16,13 +16,14 @@ class UniversityTest(unittest.TestCase):
         g2 = Group('g2')
         g3 = Group('g3')
         people = []
-        for i in range(1000):
+        people_count = 100
+        for i in range(people_count):
             p = Person(name='test_'+unicode(i))
             p.add_employment(PeopleOccupation.student, '1st grade')
             people.append(p)
             if i < 50:
                 g1.add(p)
-            elif i < 100:
+            elif 50 < i < 80:
                 g2.add(p)
             else:
                 g3.add(p)

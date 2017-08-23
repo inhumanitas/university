@@ -26,17 +26,21 @@ class Faculty(object):
         self._managements = StaffUnit(StaffType.management)
         self._teachers = StaffUnit(StaffType.teachers)
         self._groups = set()
+        self._semester = set()
 
     @property
     def type(self):
         return self._f_type
-
+d
     @property
     def groups(self):
         return self._groups
 
     def add_group(self, group):
         self._groups.add(group)
+
+    def add_semester(self, semester):
+        self._semester.add(semester)
 
     def add_staff(self, staff_type, people, position):
         assert staff_type in self.staff()
