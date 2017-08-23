@@ -31,7 +31,7 @@ class Faculty(object):
     @property
     def type(self):
         return self._f_type
-d
+
     @property
     def groups(self):
         return self._groups
