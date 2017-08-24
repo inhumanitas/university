@@ -1,12 +1,15 @@
 # coding: utf-8
 from datetime import datetime
 
+from collections import defaultdict
+
 from minobr.people import PeopleOccupation, Unit, Person, OccupiedPersonMixin
 
 
 class Schedule(object):
     topic = None
     date = None
+    passed = False
     student_attended = None
     student_skipped = None
 
@@ -40,41 +43,45 @@ class _Scheduler(object):
 
     def __init__(self):
         super(_Scheduler, self).__init__()
-        self.time_table = {}
+        self.time_table = defaultdict(list)
 
     @staticmethod
     def _generate_key(*args):
         return '_'.join(map(unicode, args))
 
     def new_topic_entrance(self, date, topic):
-        self.time_table[self._generate_key(date, topic)] = Schedule(topic)
+        schedule = Schedule(topic)
+        schedule.date = date
+        self.time_table[self._generate_key(topic)].append(schedule)
 
     def set_attending(self, date, topic, attended, skipped):
-        schedule = self.time_table.get(self._generate_key(date, topic))
-        if not schedule:
+        schedule_lst = self.time_table.get(self._generate_key(topic))
+        if not schedule_lst:
             raise ValueError('Schedule entry not found')
+
+        for schedule in schedule_lst:
+            if not schedule.passed and schedule.date == date:
+                schedule.passed = True
+                break
+        else:
+            schedule = Schedule(topic)
+            schedule.date = date
+            schedule_lst.append(schedule)
+
         schedule.set_attending(date, attended, skipped)
         return schedule
 
-    def attended(self, date, topic):
+    def get_timetable(self):
+        return self.time_table
+
+    def get_schedules(self, date, topic):
         assert isinstance(date, datetime)
-        schedule = self.time_table.get(self._generate_key(date, topic))
-        if not schedule:
+        schedules = self.time_table.get(self._generate_key(topic))
+
+        if not schedules:
             raise ValueError('Schedule entry not found')
 
-        return schedule.student_attended
-
-    def skipped(self, date=None, topic=None):
-        if date and topic:
-            assert isinstance(date, datetime)
-            schedule = self.time_table.get(self._generate_key(date, topic))
-            if not schedule:
-                raise ValueError('Schedule entry not found')
-            schedules = [schedule]
-        else:
-            schedules = self.time_table.values()
-
-        return sum([sch.student_skipped for sch in schedules],[])
+        return schedules
 
 
 class Group(Unit):
@@ -102,11 +109,11 @@ class Group(Unit):
     def new_topic_entrance(self, date, topic):
         return self._scheduler.new_topic_entrance(date, topic)
 
-    def skipped(self, date=None, topic=None):
-        return self._scheduler.skipped(date, topic)
+    def get_timetable(self):
+        return self._scheduler.get_timetable()
 
-    def attended(self, date, topic):
-        return self._scheduler.attended(date, topic)
+    def get_schedules(self, date, topic):
+        return self._scheduler.get_schedules(date, topic)
 
 
 class Student(Person, OccupiedPersonMixin):

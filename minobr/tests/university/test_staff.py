@@ -3,7 +3,10 @@
 import unittest
 
 from minobr.people import PeopleOccupation
+from minobr.tests.fake_objects import create_teacher, TOPICS, combine_faculty
+from minobr.university.faculty import FacultyTypes, FacultyManagement
 from minobr.university.staff import StaffUnit, StaffType, Teacher
+from minobr.university.topics import Topic
 
 
 class StaffUnitTest(unittest.TestCase):
@@ -41,3 +44,22 @@ class StaffUnitTest(unittest.TestCase):
         self.assertTrue(self.deanery.workers())
 
         self.deanery.fire_person(self.Sam, self.position)
+
+
+class ManagerTest(unittest.TestCase):
+
+    def test_change_topic_teacher(self):
+        faculty = combine_faculty(FacultyTypes.tech)
+        f_mng = FacultyManagement(faculty)
+        manager = f_mng.management_obj.staff()[StaffType.management].list()[0]
+        f_mng.set_manager(manager)
+
+        topic_dict = TOPICS[0]
+        kn_area = topic_dict.keys()[0]
+        teacher1 = create_teacher(knowledge_area=kn_area)
+        teacher2 = create_teacher(knowledge_area=kn_area)
+
+        topic = Topic(topic_dict[kn_area][0], teacher1)
+
+        f_mng.change_topic_teacher(topic, teacher2)
+        self.assertEqual(topic.teacher, teacher2)

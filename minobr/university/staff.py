@@ -36,6 +36,7 @@ class StaffUnit(Unit):
 
 
 class Teacher(Person, OccupiedPersonMixin):
+    knowledge_area = None
 
     @staticmethod
     def schedule_topic(group, date, topic):

@@ -35,8 +35,8 @@ class UniversityTest(unittest.TestCase):
             p.add_employment(PeopleOccupation.student, '1st grade')
             g.add(p)
             people.append(p)
-        decan = create_teacher()
-        f1.hire(StaffType.management, decan, 'decan')
+        dean = create_teacher()
+        f1.hire(StaffType.management, dean, 'dean')
         self.assertTrue(u1.list())
         self.assertTrue(u1.staff())
         for f in u1.list():

@@ -1,4 +1,5 @@
 # coding: utf-8
+from collections import defaultdict
 
 from minobr.helpers import Enum
 from minobr.people import PeopleOccupation
@@ -74,6 +75,7 @@ def allowed(fn):
     checkers = {
         'hire': is_working_manager,
         'dismiss_student': is_working_manager,
+        'change_topic_teacher': is_working_manager,
     }
 
     def inner(self, *args, **kwargs):
@@ -88,6 +90,11 @@ class FacultyManagement(Management):
 
     def __init__(self, management_obj):
         self.management_obj = management_obj
+
+    @allowed
+    def change_topic_teacher(self, topic, new_teacher):
+        if topic.teacher.knowledge_area == new_teacher.knowledge_area:
+            topic.teacher = new_teacher
 
     @allowed
     def hire(self, staff_type, people, position):
@@ -109,12 +116,34 @@ class FacultyManagement(Management):
     def staff(self):
         return self.management_obj.staff()
 
-    def get_not_enrolled_students(self, group=None):
-        skipped_students = []
-        for cur_group in self.management_obj.groups:
+    def students_to_fire(self, group=None):
 
+        topic_enrollment = {}
+        topic_lesson_count = {}
+        fire_students = defaultdict(int)
+        for cur_group in self.management_obj.groups:
             if group is not None and cur_group != group:
                 continue
 
-            skipped_students.extend(cur_group.skipped())
-        return skipped_students
+            students_enrolment = defaultdict(int)
+            for topic, schedules in cur_group.get_timetable().items():
+                for schedule in schedules:
+                    for skipped_student in schedule.student_skipped:
+                        students_enrolment[skipped_student] += 1
+                topic_enrollment[topic] = students_enrolment
+                topic_lesson_count[topic] = len(schedules)
+
+                min_enroll = len(schedules) * 60 / 100
+                for _topic, student_enroll_dict in topic_enrollment.items():
+                    for student, value in student_enroll_dict.items():
+                        if ((value > min_enroll) and
+                                (topic_lesson_count[_topic] > value)):
+                            student_enroll_dict.pop(student)
+
+            for topic, students in topic_enrollment.items():
+                for student in students:
+                    fire_students[student] += 1
+
+            fire_students = filter(lambda x: x >= 3, fire_students)
+
+        return fire_students
