@@ -27,7 +27,7 @@ class Faculty(object):
         self._managements = StaffUnit(StaffType.management)
         self._teachers = StaffUnit(StaffType.teachers)
         self._groups = set()
-        self._semester = set()
+        self._semesters = set()
 
     @property
     def type(self):
@@ -37,16 +37,19 @@ class Faculty(object):
     def groups(self):
         return list(self._groups)
 
+    @property
+    def semesters(self):
+        return list(self._semesters)
+
     def add_group(self, group):
         self._groups.add(group)
 
     def add_semester(self, semester):
-        self._semester.add(semester)
+        self._semesters.add(semester)
 
-    def add_staff(self, staff_type, people):
+    def hire(self, staff_type, person, position):
         assert staff_type in self.staff()
-        assert PeopleOccupation.employee in people.occupations
-        self.staff()[staff_type].add(people)
+        self.staff()[staff_type].hire_person(person, position)
 
     def staff(self):
         return {
@@ -58,20 +61,25 @@ class Faculty(object):
         return any(map(lambda staff_unit: person in staff_unit.list(),
                    self.staff().values()))
 
+    def is_manager(self, person):
+        return any(map(lambda manager: person == manager,
+                       self.staff()[StaffType.management].list()))
+
 
 def allowed(fn):
-    def add_staff_check(self):
+    def is_working_manager(self):
         return (self.management_obj.is_working(self.manager) and
                 self.management_obj.is_manager(self.manager))
 
     checkers = {
-        'add_staff': add_staff_check
+        'hire': is_working_manager,
+        'dismiss_student': is_working_manager,
     }
 
     def inner(self, *args, **kwargs):
         checker = checkers.get(fn.__name__)
         if checker and checker(self):
-            return fn(*args, **kwargs)
+            return fn(self, *args, **kwargs)
         raise NotAllowedException()
     return inner
 
@@ -82,9 +90,31 @@ class FacultyManagement(Management):
         self.management_obj = management_obj
 
     @allowed
-    def add_staff(self, staff_type, people, position):
-        self.management_obj.add_staff(staff_type, people, position)
+    def hire(self, staff_type, people, position):
+        return self.management_obj.hire(staff_type, people, position)
 
+    @allowed
     def dismiss_student(self, student):
         assert PeopleOccupation.student in student.occupations
-        self.management_obj.groups
+        st_group = None
+        for group in self.management_obj.groups:
+            if student in group.list():
+                st_group = group
+                break
+        if not st_group:
+            raise ValueError('Student not enrolled')
+
+        st_group.dismiss(student)
+
+    def staff(self):
+        return self.management_obj.staff()
+
+    def get_not_enrolled_students(self, group=None):
+        skipped_students = []
+        for cur_group in self.management_obj.groups:
+
+            if group is not None and cur_group != group:
+                continue
+
+            skipped_students.extend(cur_group.skipped())
+        return skipped_students

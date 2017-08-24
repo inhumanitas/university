@@ -1,10 +1,10 @@
 # coding: utf-8
 import unittest
 
-from minobr.people import PeopleOccupation, Student
-from minobr.tests.fake_objects import combine_faculty, create_teacher
+from minobr.people import PeopleOccupation
+from minobr.tests.fake_objects import create_teacher
 from minobr.university.faculty import Faculty, FacultyTypes
-from minobr.university.group import Group
+from minobr.university.group import Group, Student
 from minobr.university.staff import StaffType
 from minobr.university.university import University
 
@@ -36,8 +36,7 @@ class UniversityTest(unittest.TestCase):
             g.add(p)
             people.append(p)
         decan = create_teacher()
-        decan.add_employment(PeopleOccupation.employee, 'decan')
-        f1.add_staff(StaffType.management, decan)
+        f1.hire(StaffType.management, decan, 'decan')
         self.assertTrue(u1.list())
         self.assertTrue(u1.staff())
         for f in u1.list():

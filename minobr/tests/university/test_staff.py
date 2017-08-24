@@ -2,8 +2,8 @@
 
 import unittest
 
-from minobr.people import PeopleOccupation, Teacher
-from minobr.university.staff import StaffUnit, StaffType
+from minobr.people import PeopleOccupation
+from minobr.university.staff import StaffUnit, StaffType, Teacher
 
 
 class StaffUnitTest(unittest.TestCase):

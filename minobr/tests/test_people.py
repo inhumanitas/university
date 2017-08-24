@@ -1,7 +1,8 @@
 # coding: utf-8
 import unittest
 
-from minobr.people import Person, PeopleOccupation, Student
+from minobr.people import Person, PeopleOccupation
+from minobr.university.group import Student
 from minobr.tests.fake_objects import combine_faculty
 from minobr.university.faculty import FacultyTypes
 

@@ -1,4 +1,5 @@
 # coding: utf-8
+
 from collections import defaultdict
 from datetime import datetime
 
@@ -36,7 +37,7 @@ class Person(object):
             setattr(self, k, v)
 
     def __repr__(self):
-        return u"<Person> {name}" % getattr(self, u'name', u'')
+        return u"<Person> {name}".format(name=getattr(self, u'name', u''))
 
 
 class PersonExperience(object):
@@ -141,24 +142,6 @@ class OccupiedPersonMixin(object):
                 for exp in self._experiences[occupation_type]:
                     exp.quit()
         self._check_employment()
-
-
-class Student(Person, OccupiedPersonMixin):
-    _faculty = None
-    _group = None
-
-    def __init__(self, faculty, group, **kwargs):
-        super(Student, self).__init__(**kwargs)
-        self._faculty = faculty
-        self._group = group
-
-
-class Teacher(Person, OccupiedPersonMixin):
-    pass
-
-
-class UniversityManager(Person, OccupiedPersonMixin):
-    pass
 
 
 class Unit(Composite):

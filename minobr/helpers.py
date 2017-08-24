@@ -28,4 +28,4 @@ class Composite(object):
         self._items.remove(item)
 
     def list(self):
-        return self._items
+        return list(self._items)

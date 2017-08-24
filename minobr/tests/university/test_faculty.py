@@ -2,11 +2,9 @@
 
 import unittest
 
-from minobr.people import PeopleOccupation, Teacher
-from minobr.tests.fake_objects import combine_faculty
 from minobr.university.faculty import FacultyTypes, Faculty
 from minobr.university.group import Group
-from minobr.university.staff import StaffType
+from minobr.university.staff import StaffType, Teacher
 
 
 class FacultyTest(unittest.TestCase):
@@ -24,7 +22,6 @@ class FacultyTest(unittest.TestCase):
         hum_fac = Faculty('languages', FacultyTypes.hum)
         self.assertEqual(hum_fac.type, FacultyTypes.hum)
         p1 = Teacher(name='test_user')
-        p1.add_employment(PeopleOccupation.employee, 'teacher')
 
-        hum_fac.add_staff(StaffType.teachers, p1)
+        hum_fac.hire(StaffType.teachers, p1, 'teacher')
         self.assertTrue(hum_fac.staff()[StaffType.teachers])

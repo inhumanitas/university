@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from minobr.helpers import Composite
+from minobr.people import Person, OccupiedPersonMixin
 from minobr.university.faculty import Faculty
 
 
@@ -9,7 +10,7 @@ class University(Composite):
 
     staff_list = None
 
-    def add_staff(self, person):
+    def hire(self, person):
         self.staff_list.add(person)
 
     def staff(self, faculty=None):
@@ -21,3 +22,7 @@ class University(Composite):
             for staff_unit in faculty.staff().values():
                 staff.update(staff_unit.list())
         return staff
+
+
+class UniversityManager(Person, OccupiedPersonMixin):
+    pass
