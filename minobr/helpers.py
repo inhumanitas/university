@@ -17,7 +17,7 @@ class Composite(object):
         assert self.item_class
 
     def validate(self, item):
-        assert isinstance(item, self.item_class)
+        assert issubclass(item.__class__, self.item_class)
 
     def add(self, item):
         self.validate(item)

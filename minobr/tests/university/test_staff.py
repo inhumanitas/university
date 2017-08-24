@@ -2,7 +2,7 @@
 
 import unittest
 
-from minobr.people import Person, PeopleOccupation
+from minobr.people import PeopleOccupation, Teacher
 from minobr.university.staff import StaffUnit, StaffType
 
 
@@ -14,7 +14,7 @@ class StaffUnitTest(unittest.TestCase):
         super(StaffUnitTest, self).setUp()
 
         self.deanery = StaffUnit(StaffType.management)
-        self.Sam = Person(name='Sam')
+        self.Sam = Teacher(name='Sam')
         self.position = 'test_position'
         self.deanery.hire_person(self.Sam, self.position)
 

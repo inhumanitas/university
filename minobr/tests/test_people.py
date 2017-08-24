@@ -1,7 +1,9 @@
 # coding: utf-8
 import unittest
 
-from minobr.people import Person, employee_person, PeopleOccupation
+from minobr.people import Person, PeopleOccupation, Student
+from minobr.tests.fake_objects import combine_faculty
+from minobr.university.faculty import FacultyTypes
 
 
 class PeopleTest(unittest.TestCase):
@@ -11,20 +13,17 @@ class PeopleTest(unittest.TestCase):
 
         self.assertNotEqual(Cain.name, Adam.name)
 
-    def test_experience(self):
-        Cain = Person(name='Cain')
-        self.assertFalse(Cain.experiences)
-
     def test_employment(self):
-        Adam = Person(name='Adam')
-        Cain = Person(name='Cain')
+        f1 = combine_faculty(FacultyTypes.hum)
+        Adam = Student(f1, f1.groups[0], name='Adam')
+        Cain = Student(f1, f1.groups[0], name='Cain')
         # Cain is a student
-        employee_person(Cain, PeopleOccupation.student, 'First grade')
+        Adam.add_employment(PeopleOccupation.student, 'First grade')
         # also he is working
-        employee_person(Cain, PeopleOccupation.employee, 'Freelancer')
+        Cain.add_employment(PeopleOccupation.employee, 'Freelancer')
         self.assertTrue(Cain.experiences)
 
-        employee_person(Adam, PeopleOccupation.employee, 'Translator')
+        Adam.add_employment(PeopleOccupation.employee, 'Translator')
         self.assertTrue(Adam.experiences)
 
         # left work and university

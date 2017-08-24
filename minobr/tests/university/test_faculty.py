@@ -2,12 +2,10 @@
 
 import unittest
 
-from minobr.fake_objects import combine_faculty
-from minobr.people import Person, PeopleOccupation
-from minobr.university.group import Group
+from minobr.people import PeopleOccupation, Teacher
+from minobr.tests.fake_objects import combine_faculty
 from minobr.university.faculty import FacultyTypes, Faculty
-from minobr.university.topics import Topic
-from minobr.university.semestr import Semester
+from minobr.university.group import Group
 from minobr.university.staff import StaffType
 
 
@@ -25,11 +23,8 @@ class FacultyTest(unittest.TestCase):
     def test_faculty_add_workers(self):
         hum_fac = Faculty('languages', FacultyTypes.hum)
         self.assertEqual(hum_fac.type, FacultyTypes.hum)
-        p1 = Person(name='test_user')
+        p1 = Teacher(name='test_user')
         p1.add_employment(PeopleOccupation.employee, 'teacher')
 
-        hum_fac.add_staff(StaffType.teachers, p1, 'teacher')
+        hum_fac.add_staff(StaffType.teachers, p1)
         self.assertTrue(hum_fac.staff()[StaffType.teachers])
-
-    def test_dismiss_student(self):
-        f = combine_faculty(FacultyTypes.tech)
