@@ -18,10 +18,6 @@ class PeopleTest(unittest.TestCase):
         f1 = combine_faculty(FacultyTypes.hum)
         Adam = Student(f1, f1.groups[0], name='Adam')
         Cain = Student(f1, f1.groups[0], name='Cain')
-        # Cain is a student
-        Adam.add_employment(PeopleOccupation.student, 'First grade')
-        # also he is working
-        Cain.add_employment(PeopleOccupation.employee, 'Freelancer')
         self.assertTrue(Cain.experiences)
 
         Adam.add_employment(PeopleOccupation.employee, 'Translator')

@@ -95,6 +95,9 @@ class Group(Unit):
         self.name = name
         self._students = set()
 
+    def __repr__(self):
+        return u"<Group %s> population: %s" % (self.name, len(self.list()))
+
     def validate(self, item):
         super(Group, self).validate(item)
         assert PeopleOccupation.student in item.occupations
@@ -124,3 +127,5 @@ class Student(Person, OccupiedPersonMixin):
         super(Student, self).__init__(**kwargs)
         self._faculty = faculty
         self._group = group
+        self.add_employment(PeopleOccupation.student, 'student')
+        self._group.add(self)

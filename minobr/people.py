@@ -37,7 +37,8 @@ class Person(object):
             setattr(self, k, v)
 
     def __repr__(self):
-        return u"<Person> {name}".format(name=getattr(self, u'name', u''))
+        return u"<{type}> {name}".format(type=self.__class__.__name__,
+                                         name=getattr(self, u'name', u''))
 
 
 class PersonExperience(object):

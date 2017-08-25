@@ -25,7 +25,6 @@ def _gen_student(faculty, group):
 
     while True:
         student = Student(faculty, group, name=faker.name())
-        student.add_employment(PeopleOccupation.student, 'student')
         yield student
 
 
@@ -64,7 +63,6 @@ def create_group(faculty, count=1, students_count=10):
         group = Group(faker.word())
         for cur in range(students_count):
             s1 = Student(faculty, group, name=faker.name())
-            s1.add_employment(PeopleOccupation.student, 'student')
             group.add(s1)
         groups.append(group)
     return groups

@@ -32,7 +32,6 @@ class UniversityTest(unittest.TestCase):
             else:
                 g = g3
             p = Student(f1, g, name='test_'+unicode(i))
-            p.add_employment(PeopleOccupation.student, '1st grade')
             g.add(p)
             people.append(p)
         dean = create_teacher()

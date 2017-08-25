@@ -13,8 +13,7 @@ class GroupTest(unittest.TestCase):
         f = combine_faculty(FacultyTypes.hum)
         student = Student(f, f.groups[0])
         group1 = Group('1')
-        self.assertRaises(AssertionError, group1.add, student)
 
-        student.add_employment(PeopleOccupation.student, group1.name)
         group1.add(student)
         self.assertTrue(group1.list())
+        self.assertIn(student, group1.list())

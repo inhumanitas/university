@@ -30,6 +30,9 @@ class Faculty(object):
         self._groups = set()
         self._semesters = set()
 
+    def __repr__(self):
+        return u"<Faculty %s> %s" % (self.type, self.name)
+
     @property
     def type(self):
         return self._f_type

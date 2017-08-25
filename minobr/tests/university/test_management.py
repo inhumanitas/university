@@ -39,10 +39,6 @@ class RolesTest(unittest.TestCase):
         manager = f_mng.management_obj.staff()[StaffType.management].list()[0]
         f_mng.set_manager(manager)
 
-        student = Student(faculty, faculty.groups[0])
-        student.add_employment(PeopleOccupation.student, 'student')
-        self.assertRaises(ValueError, f_mng.dismiss_student, student)
-
         group = faculty.groups[0]
         student = group.list()[0]
 
