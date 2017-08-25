@@ -4,7 +4,6 @@ from functools import wraps
 
 from faker import Faker
 
-from minobr.people import PeopleOccupation
 from minobr.university.faculty import Faculty
 from minobr.university.group import Group, Student
 from minobr.university.semestr import Semester

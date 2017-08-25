@@ -1,7 +1,6 @@
 # coding: utf-8
 import unittest
 
-from minobr.people import PeopleOccupation
 from minobr.tests.fake_objects import create_teacher
 from minobr.university.faculty import Faculty, FacultyTypes
 from minobr.university.group import Group, Student

@@ -3,10 +3,8 @@ import unittest
 
 from faker import Faker
 
-from minobr.people import PeopleOccupation
 from minobr.tests.fake_objects import create_teacher, combine_faculty
 from minobr.university.faculty import FacultyManagement, FacultyTypes
-from minobr.university.group import Student
 from minobr.university.management import NotAllowedException
 from minobr.university.staff import StaffType
 

@@ -16,6 +16,8 @@ class Schedule(object):
     def __init__(self, topic):
         super(Schedule, self).__init__()
         self.topic = topic
+        self.student_attended = []
+        self.student_skipped = []
 
     def set_attending(self, date, attended_student, skipped_students=None):
         self.date = date
